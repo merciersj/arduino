@@ -277,20 +277,22 @@ void loop()
   // the sharpness of the turn.  You can adjust the constants by which
   // the proportional, integral, and derivative terms are multiplied to
   // improve performance.
-  int power_difference = proportional/85 + integral/225000 + derivative*.6;
+  int power_difference = proportional/14 + integral/225000 + derivative*.6;
+  //int power_difference = proportional*1/8 + derivative*25/10;
+  //int power_difference = proportional/20 + integral/10000 + derivative*3/2;
 
   // Compute the actual motor settings.  We never set either motor
   // to a negative value.
-  const int maximum = 30;
+  const int maximum = 20;
   if (power_difference > maximum)
     power_difference = maximum;
   if (power_difference < -maximum)
     power_difference = -maximum;
 
   if (power_difference < 0)
-    OrangutanMotors::setSpeeds(maximum + power_difference, maximum);
+    OrangutanMotors::setSpeeds(maximum + power_difference, maximum - power_difference*.85);
   else
-    OrangutanMotors::setSpeeds(maximum, maximum - power_difference);
+    OrangutanMotors::setSpeeds(maximum + power_difference*.85, maximum - power_difference);
 
   resetMelody();
 }
